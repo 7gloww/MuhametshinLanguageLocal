@@ -39,6 +39,9 @@ namespace MuhametshinLanguage
 
             CBoxNumRecordsPage.SelectedIndex = 0;
 
+            GenderSort.SelectedIndex = 0;
+            ComboSort.SelectedIndex = 0;
+
             UpdateClients();
         }
 
@@ -48,6 +51,46 @@ namespace MuhametshinLanguage
 
             int totalNumAgents = currentClients.Count;
 
+            string searchDigits = new string(TBoxSearch.Text.Where(char.IsDigit).ToArray());
+
+
+
+            currentClients = currentClients
+            .Where(a =>
+                a.FullName.ToLower().Contains(TBoxSearch.Text.ToLower()) ||
+                (!string.IsNullOrEmpty(searchDigits) && new string(a.Phone.Where(char.IsDigit).ToArray()).Contains(searchDigits)) ||
+                a.Email.Contains(TBoxSearch.Text.ToLower())
+                )
+            .ToList();
+
+
+
+            if (GenderSort.SelectedIndex == 1)
+            {
+                currentClients = currentClients.Where(a => a.Gender.Name == "женский").ToList();
+            }
+            if (GenderSort.SelectedIndex == 2)
+            {
+                currentClients = currentClients.Where(a => a.Gender.Name == "мужской").ToList();
+            }
+
+
+
+            if (ComboSort.SelectedIndex == 1)
+            {
+                currentClients = currentClients.OrderBy(a => a.FirstName).ToList();
+            }
+            if (ComboSort.SelectedIndex == 2)
+            {
+                currentClients = currentClients.OrderByDescending(a => a.LastVisitTime).ToList();
+            }
+            if (ComboSort.SelectedIndex == 3)
+            {
+                currentClients = currentClients.OrderByDescending(a => a.NumVisits).ToList();
+            }
+
+
+
             int currentNumAgents = currentClients.Count;
 
             TBlockNumRecords.Text = $"{currentNumAgents} из {totalNumAgents}";
@@ -55,6 +98,7 @@ namespace MuhametshinLanguage
             _filteredClients = currentClients;
             currentPage = 1;
             ChangePage();
+
         }
 
         private void ChangePage()
@@ -159,6 +203,21 @@ namespace MuhametshinLanguage
                     }
                 }
             }
+        }
+
+        private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateClients();
+        }
+
+        private void GenderSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateClients();
+        }
+
+        private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateClients();
         }
     }
 }
