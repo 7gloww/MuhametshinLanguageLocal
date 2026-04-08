@@ -1,0 +1,152 @@
+﻿<Page x:Class="MuhametshinLanguage.ClientPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MuhametshinLanguage"
+      mc:Ignorable="d"
+      FontFamily="Comic Sans MS"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="LanguageSchool">
+
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"></Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <ListView Name="ListViewClients" Grid.Row="0" VirtualizingPanel.ScrollUnit="Pixel"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    <Setter Property="Padding" Value="0"></Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="LightGray" BorderThickness="1">
+                        <Grid Margin="10">
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontSize" Value="18"></Setter>
+                                </Style>
+                            </Grid.Resources>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Image Grid.Column="0" Width="175" Stretch="Uniform" Margin="0 0 14 0">
+                                <Image.Source>
+                                    <Binding Path="ClientPhotoPath">
+                                        <Binding.TargetNullValue>
+                                            <ImageSource>/res/images/picture.png</ImageSource>
+                                        </Binding.TargetNullValue>
+                                    </Binding>
+                                </Image.Source>
+                            </Image>
+
+                            <Grid Name="GridAllInfoClient" Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Grid.Row="0" Margin="0 0 0 14">
+                                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                                        <TextBlock Text="{Binding ID, StringFormat={}ID: {0} |}"
+                                                   FontSize="20" FontWeight="Bold" Margin="0 0 10 0"></TextBlock>
+                                        <TextBlock Text="{Binding FullName}" FontWeight="Bold" FontSize="20"></TextBlock>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                                        <TextBlock Text="{Binding GenderCode, StringFormat={}Пол: {0}}"
+                                                   Margin="0 0 16 0"></TextBlock>
+                                        <TextBlock Text="{Binding Birthday, StringFormat={}Дата рождения: {0:d}, ConverterCulture=Ru}"></TextBlock>
+                                    </StackPanel>
+
+                                    <WrapPanel Orientation="Horizontal" Margin="0 0 0 10">
+                                        <TextBlock Text="{Binding Phone, StringFormat={}Телефон: {0}}"
+                                                   Margin="0 0 16 0"></TextBlock>
+                                        <TextBlock Text="{Binding Email, StringFormat={}E-mail: {0}}"></TextBlock>
+                                    </WrapPanel>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0 0 0 6">
+                                        <TextBlock Text="{Binding RegistrationDate, StringFormat={}Дата регистрации: {0:d}, ConverterCulture=Ru}"></TextBlock>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Bottom">
+                                    <WrapPanel Orientation="Horizontal">
+                                        <TextBlock Foreground="Black" Margin="0 0 16 0">
+                                            <TextBlock.Text>
+                                                <Binding Path="LastVisitTime" StringFormat="{}Последнее посещение: {0:dd.MM.yyyy HH:mm}" ConverterCulture="Ru">
+                                                    <Binding.TargetNullValue>
+                                                        Нет посещений
+                                                    </Binding.TargetNullValue>
+                                                </Binding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <Binding Path="NumVisits" StringFormat="{}Кол-во посещений: {0}"
+                                                         ConverterCulture="Ru" TargetNullValue=""></Binding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Grid>
+
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                <Button Name="BtnDeleteClient" Content="Удалить" Click="BtnDeleteClient_Click"></Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Grid Name="GridBottom" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Name="TBlockNumRecords" d:Text="0 из 0" VerticalAlignment="Center" Margin="10 0 0 0" Grid.Column="0"></TextBlock>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                <StackPanel Orientation="Horizontal" Margin="0 0 18 0">
+                    <TextBlock Text="Выводить по" Margin="0 0 10 0" VerticalAlignment="Center"></TextBlock>
+                    <ComboBox Name="CBoxNumRecordsPage" Height="auto" SelectionChanged="CBoxNumRecordsPage_SelectionChanged">
+                        <ComboBoxItem>10</ComboBoxItem>
+                        <ComboBoxItem>50</ComboBoxItem>
+                        <ComboBoxItem>200</ComboBoxItem>
+                        <ComboBoxItem>Все</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+
+                <Button Name="BtnPrevPage" Content="&lt;" Padding="0" Width="32" Height="auto" Click="BtnPrevPage_Click"></Button>
+
+                <ListBox Name="LBoxPages" SelectionChanged="LBoxPages_SelectionChanged" Height="auto">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"></WrapPanel>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+
+                <Button Name="BtnNextPage" Content="&gt;" Padding="0" Width="32" Height="auto" Click="BtnNextPage_Click"></Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>
