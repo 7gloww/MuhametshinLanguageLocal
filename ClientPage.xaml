@@ -166,7 +166,7 @@
             <StackPanel Orientation="Horizontal" Grid.Column="1">
                 <StackPanel Orientation="Horizontal" Margin="0 0 18 0">
                     <TextBlock Text="Выводить по" Margin="0 0 10 0" VerticalAlignment="Center"></TextBlock>
-                    <ComboBox Name="CBoxNumRecordsPage" Height="auto" SelectionChanged="CBoxNumRecordsPage_SelectionChanged">
+                    <ComboBox Name="CBoxNumRecordsPage" VerticalContentAlignment="Center" Width="50" Height="35" FontSize="15" SelectionChanged="CBoxNumRecordsPage_SelectionChanged">
                         <ComboBoxItem>10</ComboBoxItem>
                         <ComboBoxItem>50</ComboBoxItem>
                         <ComboBoxItem>200</ComboBoxItem>
@@ -174,17 +174,17 @@
                     </ComboBox>
                 </StackPanel>
 
-                <Button Name="BtnPrevPage" Content="&lt;" Padding="0" Width="32" Height="auto" Click="BtnPrevPage_Click"></Button>
+                <Button Name="BtnPrevPage" Content="&lt;" Padding="0" Width="32" Height="35" Click="BtnPrevPage_Click"></Button>
 
-                <ListBox Name="LBoxPages" SelectionChanged="LBoxPages_SelectionChanged" Height="auto">
+                <ListBox Name="LBoxPages" SelectionChanged="LBoxPages_SelectionChanged" Height="40">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"></WrapPanel>
+                            <WrapPanel Orientation="Horizontal" VerticalAlignment="Center"></WrapPanel>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                 </ListBox>
 
-                <Button Name="BtnNextPage" Content="&gt;" Padding="0" Width="32" Height="auto" Click="BtnNextPage_Click"></Button>
+                <Button Name="BtnNextPage" Content="&gt;" Padding="0" Width="32" Height="35" Click="BtnNextPage_Click"></Button>
             </StackPanel>
         </Grid>
     </Grid>
