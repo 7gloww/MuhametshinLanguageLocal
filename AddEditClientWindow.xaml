@@ -1,0 +1,144 @@
+﻿<Window x:Class="MuhametshinLanguage.AddEditClientWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MuhametshinLanguage"
+        mc:Ignorable="d"
+        Title="AddEditClientWindow" Height="630" Width="1000" FontFamily="Comic Sans MS">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"></Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="1" Content="Назад" Name="BtnBack" HorizontalAlignment="Right" VerticalAlignment="Top"  Click="BtnBack_Click"></Button>
+                
+                <StackPanel Name="PanelFirst" Margin="0 0 10 0" Grid.Column="0">
+
+                    <StackPanel Name="PanelClientID" Margin="0 0 0 10">
+                        <TextBlock Text="ID:" Margin="0 0 0 4"></TextBlock>
+                        <TextBox Name="TBoxClientID" Text="{Binding ID}" IsReadOnly="True" Background="LightGray"></TextBox>
+                    </StackPanel>
+                    
+                    <StackPanel Name="PanelClientFirstName" Margin="0 0 0 10">
+                        <TextBlock Text="Фамилия:" Margin="0 0 0 4"></TextBlock>
+                        <TextBox Name="TBoxClientFirstName" Text="{Binding FirstName}"></TextBox>
+                    </StackPanel>
+
+                    <StackPanel Name="PanelClientLastName" Margin="0 0 0 10">
+                        <TextBlock Text="Имя:" Margin="0 0 0 4"></TextBlock>
+                        <TextBox Name="TBoxClientLastName" Text="{Binding LastName}"></TextBox>
+                    </StackPanel>
+
+                    <StackPanel Name="PanelClientPatronymic" Margin="0 0 0 10">
+                        <TextBlock Text="Отчество:" Margin="0 0 0 4"></TextBlock>
+                        <TextBox Name="TBoxClientPatronymic" Text="{Binding Patronymic}"></TextBox>
+                    </StackPanel>
+
+                    <StackPanel Name="PanelClientEmail" Margin="0 0 0 10">
+                        <TextBlock Text="Email:" Margin="0 0 0 4"></TextBlock>
+                        <TextBox Name="TBoxClientEmail" Text="{Binding Email}"></TextBox>
+                    </StackPanel>
+
+                    <StackPanel Name="PanelClientPhone" Margin="0 0 0 10">
+                        <TextBlock Text="Телефон:" Margin="0 0 0 4"></TextBlock>
+                        <TextBox Name="TBoxClientPhone" Text="{Binding Phone}"></TextBox>
+                    </StackPanel>
+
+                    <StackPanel Name="PanelClientBirthday" Margin="0 0 0 10">
+                        <TextBlock Text="Дата рождения:" Margin="0 0 0 4"></TextBlock>
+                        <DatePicker Name="DPickerBirthday" Margin="0 0 10 0" FontSize="15" Text="{Binding Birthday}"></DatePicker>
+                    </StackPanel>
+
+
+                    <StackPanel Name="PanelClientGender" Margin="0 0 0 10">
+                        <TextBlock Text="Пол:" Margin="0 0 0 4"></TextBlock>
+                        <StackPanel Margin="5 5 0 0">
+                            <RadioButton Content="Мужской" GroupName="Gender"
+                         Width="130" FontSize="20" Checked="RButtonUp_Checked"
+                         Name="RButtonUp" HorizontalAlignment="Left"></RadioButton>
+                            <RadioButton Content="Женский" GroupName="Gender"
+                         Width="130" FontSize="20" Checked="RButtonDown_Checked"
+                         Name="RButtonDown" HorizontalAlignment="Left"></RadioButton>
+                        </StackPanel>
+                    </StackPanel>
+                    
+                </StackPanel>
+
+                <StackPanel Name="PanelSecond" Margin="10 200 0 0" Grid.Column="1">
+
+                    <StackPanel Name="PanelClientPhoto" Margin="0 0 0 10" HorizontalAlignment="Left">
+                        <TextBlock Text="Фото:" Margin="0 0 0 4"></TextBlock>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <Border BorderBrush="LightGray" BorderThickness="1" Padding="8" Margin="0 0 10 4" Grid.Column="0">
+                                <Image Name="ImgLogo" MaxWidth="150" MaxHeight="200">
+                                    <Image.Source>
+                                        <Binding Path="ClientPhotoPath">
+                                            <Binding.TargetNullValue>
+                                                <ImageSource>/res/images/picture.png</ImageSource>
+                                            </Binding.TargetNullValue>
+                                        </Binding>
+                                    </Image.Source>
+                                </Image>
+                            </Border>
+
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal" Margin="0 0 0 6" VerticalAlignment="Top"
+                        HorizontalAlignment="Left">
+                                    <Button Name="BtnLogoEdit" Content="Изменить" FontWeight="Regular" Margin="0 0 10 0"
+                        Background="{x:Null}" Foreground="Black" BorderBrush="Black"
+                        Click="BtnLogoEdit_Click"></Button>
+                                    <Button Name="BtnLogoDelete" Content="Удалить" FontWeight="Regular"
+                        Background="{x:Null}" Foreground="Red" BorderBrush="Red"
+                        Click="BtnLogoDelete_Click"></Button>
+                                </StackPanel>
+                            </StackPanel>
+                            <TextBlock Name="TBlockLogoPath" Text="{Binding PhotoPath}" FontSize="16"
+                   TextWrapping="Wrap" d:Text="path/path/path/path"
+                   VerticalAlignment="Center" Opacity="0.4" Grid.Row="1" Grid.ColumnSpan="2"></TextBlock>
+                        </Grid>
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+
+        <StackPanel Name="PanelBottom" Grid.Row="1">
+            <Separator BorderBrush="LightGray" BorderThickness="1" VerticalAlignment="Top" HorizontalAlignment="Stretch"></Separator>
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center">
+                    <Button Name="BtnSave" Content="Сохранить"
+                            Click="BtnSave_Click"></Button>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>

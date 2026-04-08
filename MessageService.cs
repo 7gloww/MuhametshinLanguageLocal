@@ -19,6 +19,11 @@ namespace MuhametshinLanguage
             MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
+        public void ShowError(string message, string title = "Ошибка")
+        {
+            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
         public MessageBoxResult ShowWarningExtended(string message, string title = "Предупреждение")
         {
             return MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Warning);

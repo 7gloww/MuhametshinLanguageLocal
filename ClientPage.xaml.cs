@@ -1,10 +1,11 @@
-﻿
-using MuhametshinLanguage;
+﻿using MuhametshinLanguage;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,7 +15,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MuhametshinLanguage
 {
@@ -181,6 +181,58 @@ namespace MuhametshinLanguage
             ChangePage();
         }
 
+        private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateClients();
+        }
+
+        private void GenderSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateClients();
+        }
+
+        private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateClients();
+        }
+
+        private void DeletePrevLogo(string absolutePath)
+        {
+            string shortRelativePath = $"/res/images/Клиенты/{Path.GetFileName(absolutePath)}";
+
+            try
+            {
+                if (!MuhametshinLanguageEntities.GetContext().Client.Any(a => a.PhotoPath == shortRelativePath))
+                {
+                    File.Delete(absolutePath);
+                    _messageService.ShowInfo($"Предыдущий логотип \"{Path.GetFileName(absolutePath)}\" успешно удалён.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _messageService.ShowError($"Ошибка удаления предыдущего логотипа.\n\n{ex.Message}");
+            }
+        }
+
+        private void BtnAddClient_Click(object sender, RoutedEventArgs e)
+        {
+            var AddEditClientWindow = new AddEditClientWindow(null);
+
+            try
+            {
+                if (AddEditClientWindow.ShowDialog() == true)
+                {
+                    MuhametshinLanguageEntities.GetContext().SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                _messageService.ShowError($"Ошибка добавления нового клиента.\n\n{ex.Message}");
+            }
+
+            UpdateClients();
+        }
+
         private void BtnDeleteClient_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.DataContext is Client client)
@@ -205,19 +257,44 @@ namespace MuhametshinLanguage
             }
         }
 
-        private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
+        private async void BtnEditClient_Click(object sender, RoutedEventArgs e)
         {
-            UpdateClients();
-        }
+            if (sender is Button btn && btn.DataContext is Client client)
+            {
+                var addEditClientWindow = new AddEditClientWindow(client);
 
-        private void GenderSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateClients();
-        }
+                string oldShortRelativeLogoPath = client.PhotoPath;
 
-        private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateClients();
+                try
+                {
+                    if (addEditClientWindow.ShowDialog() == true)
+                    {
+                        MuhametshinLanguageEntities.GetContext().SaveChanges();
+
+                        UpdateClients();
+
+                        await Task.Delay(500);
+                        GC.Collect();
+                        await Task.Delay(200);
+
+                        string absoluteLogoPath = "";
+                        if (!string.IsNullOrEmpty(oldShortRelativeLogoPath))
+                        {
+                            absoluteLogoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "res", "images", oldShortRelativeLogoPath.TrimStart('/'));
+                            DeletePrevLogo(absoluteLogoPath);
+                        }
+                    }
+                    else
+                    {
+                        MuhametshinLanguageEntities.GetContext().Entry(client).Reload();
+                        UpdateClients();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _messageService.ShowError($"Ошибка сохранения информации.\n\n{ex.Message}");
+                }
+            }
         }
     }
 }

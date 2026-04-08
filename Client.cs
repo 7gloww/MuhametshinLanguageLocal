@@ -44,7 +44,7 @@ namespace MuhametshinLanguage
                     return null;
                 }
 
-                return $"/res/images/{PhotoPath.Trim()}";
+                return $"{PhotoPath.Trim()}";
             }
         }
 
