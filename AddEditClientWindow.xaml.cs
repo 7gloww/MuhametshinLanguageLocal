@@ -41,8 +41,12 @@ namespace MuhametshinLanguage
             }
             else
             {
-                _currentClient = new Client();
+                _currentClient = new Client()
+                {
+                    Birthday = new DateTime(2000, 1, 1)
+                };
                 Title = "Добавление клиента";
+                PanelClientID.Visibility = Visibility.Collapsed;
             }
 
             SetupUI();
@@ -59,6 +63,26 @@ namespace MuhametshinLanguage
             else
             {
                 BtnLogoDelete.Visibility = Visibility.Collapsed;
+            }
+
+
+
+            if (_currentClient.GenderCode != null)
+            {
+                var gender = _context.Gender.FirstOrDefault(g =>
+                    g.Code == _currentClient.GenderCode);
+
+                if (gender != null)
+                {
+                    if (gender.Code == "м")
+                    {
+                        RButtonUp.IsChecked = true;
+                    }
+                    else if (gender.Code == "ж")
+                    {
+                        RButtonDown.IsChecked = true;
+                    }
+                }
             }
         }
 
@@ -106,9 +130,23 @@ namespace MuhametshinLanguage
                 errors.AppendLine("Укажите телефон");
             }
 
-            if (string.IsNullOrWhiteSpace(DPickerBirthday.Text))
+            if (DPickerBirthday.SelectedDate == null)
             {
                 errors.AppendLine("Укажите дату рождения");
+            }
+            else
+            {
+                var birthday = DPickerBirthday.SelectedDate.Value;
+
+                if (birthday > DateTime.Now)
+                {
+                    errors.AppendLine("Дата рождения не может быть в будущем");
+                }
+            }
+
+            if (_currentClient.GenderCode == null)
+            {
+                errors.AppendLine("Укажите пол клиента");
             }
 
             if (errors.Length > 0)
@@ -122,7 +160,7 @@ namespace MuhametshinLanguage
 
         private void BtnLogoEdit_Click(object sender, RoutedEventArgs e)
         {
-            string clientsFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "res", "images", "Клиенты");
+            string clientsFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Клиенты");
 
             var fileDialogWindow = new OpenFileDialog
             {
@@ -153,7 +191,7 @@ namespace MuhametshinLanguage
                     }
                 }
 
-                _currentClient.PhotoPath = $"/res/images/Клиенты/{fileDialogWindow.SafeFileName}";
+                _currentClient.PhotoPath = $"/Клиенты/{fileDialogWindow.SafeFileName}";
 
                 ImgLogo.GetBindingExpression(Image.SourceProperty)?.UpdateTarget();
                 TBlockLogoPath.GetBindingExpression(TextBlock.TextProperty)?.UpdateTarget();
@@ -182,14 +220,31 @@ namespace MuhametshinLanguage
             Close();
         }
 
-        private void RButtonDown_Checked(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private void RButtonUp_Checked(object sender, RoutedEventArgs e)
         {
-            
+            if (_currentClient != null)
+            {
+                var maleGender = _context.Gender.FirstOrDefault(g => g.Code == "м");
+
+                if (maleGender != null)
+                {
+                    _currentClient.GenderCode = maleGender.Code;
+                }
+
+            }
+        }
+
+        private void RButtonDown_Checked(object sender, RoutedEventArgs e)
+        {
+            if (_currentClient != null)
+            {
+                var femaleGender = _context.Gender.FirstOrDefault(g => g.Code == "ж");
+
+                if (femaleGender != null)
+                {
+                    _currentClient.GenderCode = femaleGender.Code;
+                }
+            }
         }
     }
 }

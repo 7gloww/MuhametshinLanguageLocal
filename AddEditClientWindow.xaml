@@ -61,7 +61,7 @@
 
                     <StackPanel Name="PanelClientBirthday" Margin="0 0 0 10">
                         <TextBlock Text="Дата рождения:" Margin="0 0 0 4"></TextBlock>
-                        <DatePicker Name="DPickerBirthday" Margin="0 0 10 0" FontSize="15" Text="{Binding Birthday}"></DatePicker>
+                        <DatePicker Name="DPickerBirthday" Margin="0 0 10 0" FontSize="15" SelectedDate="{Binding Birthday, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></DatePicker>
                     </StackPanel>
 
 

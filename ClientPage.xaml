@@ -111,7 +111,7 @@
                                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                                         <TextBlock Text="{Binding GenderCode, StringFormat={}Пол: {0}}"
                                                    Margin="0 0 16 0"></TextBlock>
-                                        <TextBlock Text="{Binding Birthday, StringFormat={}Дата рождения: {0:d}, ConverterCulture=Ru}"></TextBlock>
+                                        <TextBlock Text="{Binding Birthday, StringFormat={}Дата рождения: {0:d},  ConverterCulture=Ru}"></TextBlock>
                                     </StackPanel>
 
                                     <WrapPanel Orientation="Horizontal" Margin="0 0 0 10">

@@ -49,7 +49,7 @@ namespace MuhametshinLanguage
         {
             var currentClients = _context.Client.ToList();
 
-            int totalNumAgents = currentClients.Count;
+            int totalNumClients = currentClients.Count;
 
             string searchDigits = new string(TBoxSearch.Text.Where(char.IsDigit).ToArray());
 
@@ -91,9 +91,9 @@ namespace MuhametshinLanguage
 
 
 
-            int currentNumAgents = currentClients.Count;
+            int currentNumClients = currentClients.Count;
 
-            TBlockNumRecords.Text = $"{currentNumAgents} из {totalNumAgents}";
+            TBlockNumRecords.Text = $"{currentNumClients} из {totalNumClients}";
 
             _filteredClients = currentClients;
             currentPage = 1;
@@ -198,7 +198,7 @@ namespace MuhametshinLanguage
 
         private void DeletePrevLogo(string absolutePath)
         {
-            string shortRelativePath = $"/res/images/Клиенты/{Path.GetFileName(absolutePath)}";
+            string shortRelativePath = $"/Клиенты/{Path.GetFileName(absolutePath)}";
 
             try
             {
@@ -278,9 +278,9 @@ namespace MuhametshinLanguage
                         await Task.Delay(200);
 
                         string absoluteLogoPath = "";
-                        if (!string.IsNullOrEmpty(oldShortRelativeLogoPath))
+                        if (!string.IsNullOrEmpty(oldShortRelativeLogoPath) && oldShortRelativeLogoPath != client.PhotoPath)
                         {
-                            absoluteLogoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "res", "images", oldShortRelativeLogoPath.TrimStart('/'));
+                            absoluteLogoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, oldShortRelativeLogoPath.TrimStart('/'));
                             DeletePrevLogo(absoluteLogoPath);
                         }
                     }

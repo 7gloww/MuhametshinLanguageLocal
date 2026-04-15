@@ -21,7 +21,7 @@ namespace MuhametshinLanguage
             this.ClientService = new HashSet<ClientService>();
             this.Tag = new HashSet<Tag>();
         }
-    
+
         public int ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
