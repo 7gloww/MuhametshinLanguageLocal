@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -109,26 +110,99 @@ namespace MuhametshinLanguage
             {
                 errors.AppendLine("Укажите имя");
             }
+            else
+            {
+                if (TBoxClientLastName.Text.Length > 50)
+                {
+                    errors.AppendLine("Имя не может быть длиннее 50 символов");
+                }
+                if (!Regex.IsMatch(TBoxClientLastName.Text, @"^[\p{L}\s\-]+$"))
+                {
+                    errors.AppendLine("Имя может содержать только буквы, пробел и дефис");
+                }
+            }
+
+
 
             if (string.IsNullOrWhiteSpace(TBoxClientFirstName.Text))
             {
                 errors.AppendLine("Укажите фамилию");
             }
+            else
+            {
+                if (TBoxClientFirstName.Text.Length > 50)
+                {
+                    errors.AppendLine("Фамилия не может быть длиннее 50 символов");
+                }
+                if (!Regex.IsMatch(TBoxClientFirstName.Text, @"^[\p{L}\s\-]+$"))
+                {
+                    errors.AppendLine("Фамилия может содержать только буквы, пробел и дефис");
+                }
+            }
+
+
 
             if (string.IsNullOrWhiteSpace(TBoxClientPatronymic.Text))
             {
                 errors.AppendLine("Укажите отчество");
             }
+            else
+            {
+                if (TBoxClientPatronymic.Text.Length > 50)
+                {
+                    errors.AppendLine("Отчество не может быть длиннее 50 символов");
+                }
+                if (!Regex.IsMatch(TBoxClientPatronymic.Text, @"^[\p{L}\s\-]+$"))
+                {
+                    errors.AppendLine("Отчество может содержать только буквы, пробел и дефис");
+                }
+            }
+
+
 
             if (string.IsNullOrWhiteSpace(TBoxClientEmail.Text))
             {
                 errors.AppendLine("Укажите email");
             }
+            else
+            {
+                try
+                {
+                    string email = TBoxClientEmail.Text.Trim();
+
+                    TBoxClientEmail.Text = email;
+
+                    string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+
+                    if (!Regex.IsMatch(TBoxClientEmail.Text, emailPattern))
+                    {
+                        errors.AppendLine("Email должен быть в формате: name@domain.com");
+                    }
+                }
+                catch
+                {
+                    errors.AppendLine("Укажите корректный email (например, name@domain.ru)");
+                }
+            }
+
+
 
             if (string.IsNullOrWhiteSpace(TBoxClientPhone.Text))
             {
                 errors.AppendLine("Укажите телефон");
             }
+            else
+            {
+                if (!Regex.IsMatch(TBoxClientPhone.Text, @"^[\d\+\-\(\)\s]+$"))
+                {
+                    errors.AppendLine("Телефон может содержать только цифры, +, -, (, ) и пробел");
+                }
+                else if (!TBoxClientPhone.Text.Any(char.IsDigit))
+                {
+                    errors.AppendLine("Телефон должен содержать хотя бы одну цифру");
+                }
+            }
+
 
             if (DPickerBirthday.SelectedDate == null)
             {
@@ -141,6 +215,10 @@ namespace MuhametshinLanguage
                 if (birthday > DateTime.Now)
                 {
                     errors.AppendLine("Дата рождения не может быть в будущем");
+                }
+                else if (birthday < DateTime.Now.AddYears(-120))
+                {
+                    errors.AppendLine("Проверьте правильность даты рождения");
                 }
             }
 
