@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Reflection;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -166,22 +167,21 @@ namespace MuhametshinLanguage
             }
             else
             {
-                try
+                string email = TBoxClientEmail.Text.Trim();
+
+                TBoxClientEmail.Text = email;
+
+                string emailPattern = @"^(?!\.)[a-zA-Z0-9._%+-]+(?<!\.)@(?!\.)([a-zA-Z]+\.)+[a-zA-Z]+$";
+
+                if (!Regex.IsMatch(TBoxClientEmail.Text, emailPattern) || Regex.IsMatch(email, @"[а-яА-ЯёЁ]") || email.Contains(" ") ||
+                    email.StartsWith(".") || email.EndsWith(".") ||
+                    Regex.IsMatch(email, @"([^\w])\1") || Regex.IsMatch(email.Substring(email.IndexOf('@')), @"\d"))
                 {
-                    string email = TBoxClientEmail.Text.Trim();
-
-                    TBoxClientEmail.Text = email;
-
-                    string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-
-                    if (!Regex.IsMatch(TBoxClientEmail.Text, emailPattern))
-                    {
-                        errors.AppendLine("Email должен быть в формате: name@domain.com");
-                    }
+                    errors.AppendLine("Введён неккоректный email");
                 }
-                catch
+                else if (TBoxClientEmail.Text.Length > 50)
                 {
-                    errors.AppendLine("Укажите корректный email (например, name@domain.ru)");
+                    errors.AppendLine("Слишком длинный email");
                 }
             }
 
@@ -193,13 +193,28 @@ namespace MuhametshinLanguage
             }
             else
             {
+                string phone = TBoxClientPhone.Text.Trim();
+
+                int digitCount = phone.Count(char.IsDigit);
+
                 if (!Regex.IsMatch(TBoxClientPhone.Text, @"^[\d\+\-\(\)\s]+$"))
                 {
                     errors.AppendLine("Телефон может содержать только цифры, +, -, (, ) и пробел");
                 }
-                else if (!TBoxClientPhone.Text.Any(char.IsDigit))
+                else if (digitCount > 13)
                 {
-                    errors.AppendLine("Телефон должен содержать хотя бы одну цифру");
+                    errors.AppendLine("Номер телефона не может содержать более 13 цифр");
+                }
+                else if (digitCount < 9 ||
+                    phone.StartsWith("-") || phone.EndsWith("-") ||
+                    phone.StartsWith("(") || phone.EndsWith("(") || phone.StartsWith(")") || phone.EndsWith(")") || 
+                    phone.EndsWith("+") || Regex.IsMatch(phone, @"([^\d])\1")
+                    || (phone.Contains("(") && !(phone.Contains(")"))) || ((phone.Contains(")") && !(phone.Contains("("))))
+                    || (phone.Count(c => c == '+') > 1 || phone.Count(c => c == '-') > 2 ||
+                    phone.Count(c => c == '(') > 1 ||
+                    phone.Count(c => c == ')') > 1) || Regex.IsMatch(phone, @"\s{2,}"))
+                {
+                    errors.AppendLine("Некорректный номер телефона");
                 }
             }
 

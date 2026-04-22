@@ -290,6 +290,21 @@ namespace MuhametshinLanguage
                         UpdateClients();
                     }
                 }
+                catch (System.Data.Entity.Validation.DbEntityValidationException ex)
+                {
+                    //Собираем все ошибки валидации
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var validationErrors in ex.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            sb.AppendLine($"Свойство: {validationError.PropertyName}");
+                            sb.AppendLine($"Ошибка: {validationError.ErrorMessage}");
+                            sb.AppendLine();
+                        }
+                    }
+                    _messageService.ShowError($"Ошибки валидации:\n\n{sb}");
+                }
                 catch (Exception ex)
                 {
                     _messageService.ShowError($"Ошибка сохранения информации.\n\n{ex.Message}");
